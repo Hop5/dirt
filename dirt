@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# DEV Equals to the device to load.
+# In this case, the device is gonna be /dev/sda for testing
+DEV=/dev/sda
+echo "Welcome to DIRT (Destroy in Rapid Time) 0.2a"
+echo "The Disk will be erased NOW!"
+parted $DEV --script mktable gpt
+parted $DEV --script mktable msdos 
+parted $DEV --script mktable gpt
+echo "Partition Table Cleared (although no checks have been implemented)"
+echo "The Computer will shutdown in 8 Seconds"
+echo "To cancel, press CTRL+C right now..."
+echo "..."
+sleep 1s
+echo "..."
+sleep 1s
+echo "..."
+sleep 1s
+echo "... Press CTRL+C to cancel shutdown"
+sleep 1s
+echo "..."
+sleep 1s
+echo "..."
+sleep 1s
+echo "..."
+sleep 1s
+echo "Systems Down. Thank you for using DIRT"
+sleep 1s
+shutdown now 
+
+# RZ 2022
