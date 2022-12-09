@@ -34,8 +34,7 @@ if [ -n "$DEV1" ] && [ -n "$DEV2" ]; then
         DEV="$DEV2"
     fi
 fi
-# Run parted on the selected device
-parted $DEV
+
 # Wiping partition table 3 times.
 parted $DEV --script mktable gpt
 parted $DEV --script mktable msdos 
