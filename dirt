@@ -1,13 +1,47 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # DEV Equals to the device to load.
-# In this case, the device is gonna be /dev/sda for testing
-DEV=/dev/sda
-echo "Welcome to DIRT (Destroy in Rapid Time) 0.2a"
-echo "The Disk will be erased NOW!"
+# Now the program scans the computer for nvme0n1 and sda disks
+# If both of them are found, the user has to select 1 of 2.
+
+
+echo "Welcome to DIRT (Destroy in Rapid Time) 0.3 alpha"
+echo "All Storage Drives will be output right now"
+echo " "
+
+# Scan for available block devices using lsblk
+lsblk
+
+# Check for nvme0n1 device
+if [ -b /dev/nvme0n1 ]; then
+    DEV1="/dev/nvme0n1"
+    echo "Found M.2 SSD device"
+fi
+
+# Check for sda device
+if [ -b /dev/sda ]; then
+    DEV2="/dev/sda"
+    echo "Found SATA device"
+fi
+
+# If both devices are found, run lsblk again and ask user to select a device
+if [ -n "$DEV1" ] && [ -n "$DEV2" ]; then
+    lsblk
+    echo "Two drives have been detected. M.2 and SATA"
+    read -p "Which device do you want to use? (1 or 2) " choice
+    if [ "$choice" -eq 1 ]; then
+        DEV="$DEV1"
+    elif [ "$choice" -eq 2 ]; then
+        DEV="$DEV2"
+    fi
+fi
+# Run parted on the selected device
+parted $DEV
+# Wiping partition table 3 times.
 parted $DEV --script mktable gpt
 parted $DEV --script mktable msdos 
 parted $DEV --script mktable gpt
 echo "Partition Table Cleared (although no checks have been implemented)"
+echo "Thank you for using DIRT! Created by RZ"
 echo "The Computer will shutdown in 8 Seconds"
 echo "To cancel, press CTRL+C right now..."
 echo "..."
